@@ -116,24 +116,27 @@ reference `RNH1分析.R` script.
 | `plot_immune_context(cds, gene)` | violins by phenotype & IC level | `kruskal_p` |
 | `run_biomarker_report(cds, gene)` | all of the above + tables, to disk | `plots`, `summary` |
 
-### Worked example — CD274 (PD-L1)
+### Worked example — TGFB1 (TGF-β1)
 
-`CD274` (PD-L1) is a natural, well-characterised immunotherapy target — a good
-illustration that the toolkit works for **any** gene, not just the UBA52 example
-script.
+`TGFB1` encodes transforming growth factor β1. It is the signature gene of the
+IMvigor210 biomarker paper (Mariathasan *et al.*, 2018, *Nature*:
+"TGFβ attenuates tumour response to PD-L1 blockade by contributing to
+exclusion of T cells"), and it is **not** an immune-checkpoint gene — a good
+illustration that the toolkit works for any literature-supported gene, not just
+checkpoints such as PD-L1.
 
 ```r
 library(IMvigor210CoreBiologies)
 data(cds)
 
-gene <- "CD274"                       # PD-L1
+gene <- "TGFB1"                       # TGF-β1 from the original IMvigor210 paper
 
 # 1. Expression matrix (log2(TPM+1)); reuse it to avoid recomputing
 expr <- get_tpm_expression(cds)
 
 # 2. Expression in responders vs non-responders
 p1 <- plot_expression_by_response(cds, gene, expr = expr)
-p1$p.value                          # ~0.099 (Wilcoxon)
+p1$p.value                          # 4.19e-05 (Wilcoxon)
 
 # 3. Correlation with the 12 immune-checkpoint genes
 p2 <- plot_checkpoint_correlation(cds, gene, expr = expr)
@@ -145,32 +148,41 @@ attr(p3, "chisq_p")
 
 # 5. Row-scaled heatmap (target + checkpoints), all samples
 plot_gene_heatmap(cds, c(gene, IMMUNE_CHECKPOINT_GENES),
-                  expr = expr, outfile = "CD274_heatmap.pdf")
+                  expr = expr, outfile = "TGFB1_heatmap.pdf")
 
 # 6. ROC for response prediction
 p6 <- plot_roc_response(cds, gene, expr = expr)
-attr(p6, "auc")                     # ~0.57 (95% CI 0.49-0.64)
+attr(p6, "auc")                     # 0.664 (95% CI 0.59-0.737)
 
-# 7. Kaplan-Meier (by expression level, or by response)
-p7a <- plot_survival(cds, gene, by = "exprGroup", expr = expr)
-p7b <- plot_survival(cds, gene, by = "response",  expr = expr)
-attr(p7a, "pvalue"); attr(p7b, "pvalue")
+# 7. Kaplan-Meier by expression level
+p7 <- plot_survival(cds, gene, by = "exprGroup", expr = expr)
+attr(p7, "pvalue")                  # 0.10 (log-rank)
 
 # 8. Immune-microenvironment context
 p8 <- plot_immune_context(cds, gene, expr = expr)
-p8$kruskal_p
+p8$kruskal_p                        # 0.86 (phenotype), 0.79 (IC level)
 
 # 9. One call to render AND save everything
-rep <- run_biomarker_report(cds, gene, outdir = "Results/CD274")
+rep <- run_biomarker_report(cds, gene, outdir = "Results/TGFB1")
 rep$summary                        # tidy data.frame of all metrics
 ```
 
-**CD274 (PD-L1) results on IMvigor210:** responder vs non-responder Wilcoxon
-p ≈ 0.10; expression correlates with all 12 checkpoint/cytotoxic genes (min
-|R| ≈ 0.55 vs `TBX21`); ROC AUC ≈ 0.57 (95% CI 0.49–0.64); KM by response is
-highly significant (log-rank p ≈ 3e-24); expression rises across the
-desert → excluded → inflamed axis (Kruskal–Wallis p ≈ 3e-16). Exactly the
-biology you would expect for PD-L1.
+#### Real figures generated on IMvigor210
+
+| Expression by response | High/low × response |
+|:--:|:--:|
+| ![TGFB1 expression by response](vignette/figures/TGFB1/expr_by_response.png) | ![TGFB1 response proportion](vignette/figures/TGFB1/response_prop.png) |
+| Wilcoxon **p = 4.19 × 10⁻⁵**; responders express TGFB1 at lower levels. | Median-split χ² **p = 6.1 × 10⁻⁴**; high TGFB1 is enriched for non-responders (85.6% vs 68.3%). |
+
+| ROC | Overall survival by expression |
+|:--:|:--:|
+| ![TGFB1 ROC](vignette/figures/TGFB1/roc.png) | ![TGFB1 survival](vignette/figures/TGFB1/survival_expr.png) |
+| AUC = **0.664** (95% CI 0.590–0.737). | Log-rank **p = 0.10**; high TGFB1 trends toward poorer survival. |
+
+| Checkpoint correlation | Immune context |
+|:--:|:--:|
+| ![TGFB1 checkpoint correlation](vignette/figures/TGFB1/checkpoint_corr.png) | ![TGFB1 immune context](vignette/figures/TGFB1/immune_context.png) |
+| Correlations are weak overall (max |R| ≈ 0.29 vs CD274), but become significant because of the large sample size (n = 298). | No difference across annotated immune phenotype or IC level (Kruskal–Wallis p = 0.86 and 0.79), suggesting that steady-state TGFB1 mRNA alone is not a simple proxy for the excluded phenotype. |
 
 > `run_biomarker_report()` writes the same eight-folder figure + table layout as
 > the standalone UBA52 script (`expr_diff/`, `correlation/`, `group_proportion/`,
