@@ -141,6 +141,8 @@ Note: `easierData` is derived from the same paper but trims some clinical annota
 - The `cds` object is ~16 MB; it is committed in `data/` so `data(cds)` works offline after install.
 - This is a **maintenance build** of the original Genentech-authored package; all credit for the
   underlying data and science belongs to Mariathasan *et al.* / the original authors.
+- Maintained and re-published by **BioInfoCloud**, who is listed as an author of this fork in
+  `DESCRIPTION` (see the `Author:` field).
 - Network note for CI: the package itself has no external runtime dependencies beyond Bioconductor.
 
 ## License

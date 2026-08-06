@@ -5,7 +5,9 @@ Title: Data processing and analysis code for the manuscript Mariathasan
         contributing to exclusion of T cells
 Version: 1.0.0
 Date: 2019-02-11
-Author: Dorothee Nickles <nickles.dorothee@gene.com>, Richard Bourgon <bourgon.richard@gene.com>
+Author: Dorothee Nickles <nickles.dorothee@gene.com> [aut],
+        Richard Bourgon <bourgon.richard@gene.com> [aut],
+        BioInfoCloud [aut]
 Maintainer: Dorothee Nickles <nickles.dorothee@gene.com>
 Description: 
 	Data and software R package enabling the reproduction of results presented in the manuscript.
