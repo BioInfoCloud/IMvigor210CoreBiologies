@@ -1,0 +1,21 @@
+Package: IMvigor210CoreBiologies
+Type: Package
+Title: Data processing and analysis code for the manuscript Mariathasan
+        et al, TGF-b attenuates tumor response to PD-L1 blockade by
+        contributing to exclusion of T cells
+Version: 1.0.0
+Date: 2019-02-11
+Author: Dorothee Nickles <nickles.dorothee@gene.com>, Richard Bourgon <bourgon.richard@gene.com>
+Maintainer: Dorothee Nickles <nickles.dorothee@gene.com>
+Description: 
+	Data and software R package enabling the reproduction of results presented in the manuscript.
+Depends: R (>= 3.3), Biobase
+Imports: biomaRt, DESeq2, dplyr, edgeR, ggplot2, graphics, limma,
+        methods, S4Vectors, stats, SummarizedExperiment, survival
+Suggests: circlize, ComplexHeatmap, corrplot, DT, lsmeans, plyr,
+        reshape2, spatstat, knitr, rmarkdown, roxygen2
+License: file LICENSE
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2019-02-12 04:47:28 UTC; nicklesd
+Config/roxygen2/version: 8.0.0

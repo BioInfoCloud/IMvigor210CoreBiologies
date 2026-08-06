@@ -1,0 +1,14 @@
+# WorkBuddy project memory (local only — never publish)
+.workbuddy/
+
+# R session / editor junk (NOTE: do NOT ignore *.RData — package datasets in data/ must be committed)
+.Rproj.user/
+.Rhistory
+.Ruserdata
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Locally built source tarballs (keep the repo source-only)
+*.tar.gz
